@@ -20,4 +20,6 @@ router.get('/customer/list-colour/:product_id', ProductController.listColour);
 
 router.get('/customer/list-size/:product_id/:colour_id', ProductController.listSize);
 
+router.get('/admin/stat/list',ProductController.StatSide)
+
 module.exports = router;

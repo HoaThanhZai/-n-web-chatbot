@@ -1,12 +1,13 @@
 const { DataTypes } = require('sequelize');
 
 const { sequelize } = require('../configs/database');
-const Product = require('./product');
+const Product = require('./Product');
 
 const Product_Price_History = sequelize.define('Product_Price_History', {
 	product_id: { type: DataTypes.INTEGER, primaryKey: true },
 	created_at: { type: DataTypes.DATE, defaultValue: sequelize.literal("CURRENT_TIMESTAMP"), primaryKey: true },
 	price: { type: DataTypes.INTEGER, defaultValue: 0 },
+	input_price:{ type: DataTypes.INTEGER, defaultValue: 0 }
 }, {
 	timestamps: false,
 })

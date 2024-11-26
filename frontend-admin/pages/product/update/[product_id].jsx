@@ -55,6 +55,7 @@ const UpdateProductPage = () => {
     const [productName, setProductName] = useState('');
     const [categoryId, setCategoryId] = useState('');
     const [categoryName, setCategoryName] = useState('');
+    const [input_price, setInputPrice] = useState(0);
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('')
     const [editorLoaded, setEditorLoaded] = useState(false);
@@ -76,6 +77,7 @@ const UpdateProductPage = () => {
                 setProductName(result.data.product_name)
                 setCategoryId(result.data.category_id)
                 setCategoryName(result.data.category_name)
+                setInputPrice(result.data.input_price)
                 setPrice(result.data.price)
                 setDescription(result.data.description)
                 setProductVariantList(await convertProductVariantList(result.data.product_variant_list))
@@ -156,6 +158,7 @@ const UpdateProductPage = () => {
                 setProductName(result.data.product_name)
                 setCategoryId(result.data.category_id)
                 setCategoryName(result.data.category_name)
+                setInputPrice(result.data.input_price)
                 setPrice(result.data.price)
                 setDescription(result.data.description)
                 setProductVariantList(await convertProductVariantList(result.data.product_variant_list))

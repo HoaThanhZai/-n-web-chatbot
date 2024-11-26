@@ -90,7 +90,7 @@ const Footer = () => {
 									</div>
 									<div className='col-9'>
 										<p>Hotline</p>
-										<p>0819.2222.73</p>
+										<p>0387898676</p>
 									</div>
 								</div>
 								<div className='d-flex align-items-center' style={{ marginBottom: "12px" }}>

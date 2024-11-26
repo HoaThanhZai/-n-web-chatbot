@@ -1,9 +1,9 @@
 const { DataTypes } = require('sequelize');
 
 const { sequelize } = require('../configs/database');
-const Product = require('./product');
-const Colour = require('./colour');
-const Size = require('./size');
+const Product = require('./Product');
+const Colour = require('./Colour');
+const Size = require('./Size');
 
 const Product_Variant = sequelize.define('product_variant', {
 	product_variant_id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },

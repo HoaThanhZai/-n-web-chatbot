@@ -19,5 +19,6 @@ router.delete('/delete', ProductVariantController.deleteProductVariant);
 
 router.get('/customer/detail/:product_id/:colour_id/:size_id', ProductVariantController.detailCustomerSide);
 
+// router.get('/customer/detail/list',ProductVariantController.getAll);
 
 module.exports = router;

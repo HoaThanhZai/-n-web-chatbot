@@ -1,11 +1,11 @@
 const { Op } = require("sequelize");
 
 const Product_Variant = require('../models/product_variant');
-const Product = require('../models/product');
-const Colour = require('../models/colour');
-const Size = require('../models/size');
-const Product_Price_History = require('../models/product_price_history');
-const Product_Image = require('../models/product_image');
+const Product = require('../models/Product');
+const Colour = require('../models/Colour');
+const Size = require('../models/Size');
+const Product_Price_History = require('../models/Product_Price_History');
+const Product_Image = require('../models/Product_Image');
 const Category = require("../models/category");
 
 let create = async (req, res, next) => {
@@ -64,7 +64,7 @@ let listAdminSide = async (req, res, next) => {
         include: [
             {
                 model: Product, attributes: ['product_id', 'product_name'],
-                include: { model: Product_Price_History, attributes: ['price'], separate: true, order: [['created_at', 'DESC']] }
+                include: { model: Product_Price_History, attributes: ['price','input_price'], separate: true, order: [['created_at', 'DESC']] }
             },
             { model: Colour, attributes: ['colour_name'] },
             { model: Size, attributes: ['size_name'] },
@@ -80,15 +80,59 @@ let listAdminSide = async (req, res, next) => {
             colour_name: productVariant.Colour.colour_name,
             size_name: productVariant.Size.size_name,
             product_image: productVariant.Product_Images[0].path,
+            input_price:productVariant.Product.Product_Price_Histories[0].input_price,
             price: productVariant.Product.Product_Price_Histories[0].price,
             quantity: productVariant.quantity,
             state: productVariant.state,
             created_at: productVariant.created_at
         }
+        
         return newProductVariant;
     });
+    console.log(listProductVariant);
     return res.send(listProductVariant);
 }
+
+let StatSide = async (req, res, next) => {
+    try {
+        // Fetch products along with their price histories
+        let listStat = await Product.findAll({
+            attributes: ['product_id', 'product_name', 'sold'],
+            include: {
+                model: Product_Price_History,
+                attributes: ['price', 'input_price'],
+                separate: true, // Ensure separate queries for each association
+                order: [['created_at', 'DESC']] // Order by created_at descending
+            }
+        });
+
+        // Map and process each product
+        let processedListStat = listStat.map((productStat) => {
+            // Initialize newProductStat object
+            let newProductStat = {
+                product_id: productStat.product_id,
+                product_name: productStat.product_name,
+                sold: productStat.sold,
+                input_price: null, // Default to null if not found
+                price: null // Default to null if not found
+            };
+
+            // Check if Product_Price_Histories exist and has items
+            if (productStat.Product_Price_Histories && productStat.Product_Price_Histories.length > 0) {
+                newProductStat.input_price = productStat.Product_Price_Histories[0].input_price;
+                newProductStat.price = productStat.Product_Price_Histories[0].price;
+            }
+
+            return newProductStat;
+        });
+
+        console.log(processedListStat);
+        return res.send(processedListStat);
+    } catch (error) {
+        console.error('Error in StatSide:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
 
 let listCustomerSide = async (req, res, next) => {
     let category_id = Number(req.query.category);
@@ -311,5 +355,6 @@ module.exports = {
     detailCustomerSide,
     detailAdminSide,
     listColour,
-    listSize
+    listSize,
+    StatSide
 };

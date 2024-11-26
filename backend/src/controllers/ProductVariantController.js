@@ -92,6 +92,7 @@ let update = async (req, res, next) => {
     })
 }
 
+
 let onState = async (req, res, next) => {
     try {
         let product_variant_ids = req.body.product_variant_ids;
@@ -199,14 +200,12 @@ let detailCustomerSide = async (req, res, next) => {
         for (let image of productVariant.Product_Images) {
             newProductVariant.product_images.push(image.path);
         }
-
         return res.send(newProductVariant);
     } catch (err) {
         console.log(err);
         return res.status(500).send('Gặp lỗi khi tải dữ liệu vui lòng thử lại');
     }
 }
-
 module.exports = {
     create,
     update,
@@ -214,5 +213,5 @@ module.exports = {
     offState,
     updateQuantity,
     deleteProductVariant,
-    detailCustomerSide
+    detailCustomerSide,
 };

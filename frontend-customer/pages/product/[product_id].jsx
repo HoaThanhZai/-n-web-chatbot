@@ -140,12 +140,12 @@ const ProductDetailPage = () => {
 			colour: colorList[selectedColorIndex].colour_name,
 			size: sizeList[selectedSizeIndex].size_name,
 			image: product_image[0],
+			quantity:quantity,
 			price: price,
 			inventory: inventory,
-			quantity: quantity
 		}
 		dispatch(addToCart(product));
-		setQuantity(1);
+		setQuantity(quantity);
 		if (!isErrorInCart)
 			swtoast.success({ text: "Thêm sản phẩm vào giỏ hàng thành công" });
 	}
@@ -163,7 +163,9 @@ const ProductDetailPage = () => {
 							<Rate disabled allowHalf value={rating} />
 							<h6 className='d-inline-block'>({feedbackQuantity})</h6>
 						</span>
-						<span style={{ margin: "2px 0 0" }}>Đã bán (web): {sold}</span>
+						<span style={{ margin: "2px 0 0" }}>
+							Đã bán (web): {sold} - Còn lại : {inventory}
+						</span>
 					</div>
 					<div className="price-box">
 						<span>{formatPrice(price)}đ</span>

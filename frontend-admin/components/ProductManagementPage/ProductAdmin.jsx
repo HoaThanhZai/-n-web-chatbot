@@ -8,9 +8,13 @@ import Swal from "sweetalert2";
 
 const ProductAdmin = (props) => {
 
-    const addPointToPrice = (price) => {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const addPointToPrice = (cost) => {
+        if (typeof cost === 'number') {
+            return cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+        return 'N/A';
     }
+    
 
     const convertTime = (created_at) => {
         const date = new Date(created_at);
@@ -123,6 +127,7 @@ const ProductAdmin = (props) => {
             })
     }
 
+    
     return (
         <div className="table-responsive">
             <table className="table align-middle product-admin w-100">
@@ -134,11 +139,17 @@ const ProductAdmin = (props) => {
                             </p>
                             <img src={props.product_image} />
                         </td>
-                        <td className="text-danger fw-bold col-price">
+                       <td className="text-danger fw-bold col-price">
                             <p className='d-flex align-items-center justify-content-center'>
-                                {addPointToPrice(props.price)}
+                                {props.input_price !== undefined ? addPointToPrice(props.input_price) : 'N/A'}
                             </p>
                         </td>
+                        <td className="text-danger fw-bold col-price">
+                            <p className='d-flex align-items-center justify-content-center'>
+                                {props.price !== undefined ? addPointToPrice(props.price) : 'N/A'}
+                            </p>
+                        </td>
+
                         <td className="text-danger fw-bold col-quantity">
                             <p className='d-flex align-items-center justify-content-center'>
                                 {props.quantity}

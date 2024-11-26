@@ -20,4 +20,11 @@ export const menu = [
 
         ],
     },
+    {
+        title: 'Thống kê',
+        href: '/statistical/manage',
+        list: [
+
+        ],
+    },
 ]
