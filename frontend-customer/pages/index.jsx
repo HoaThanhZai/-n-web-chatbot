@@ -35,7 +35,7 @@ export default function HomePage() {
 						</div>
 					</div>
 				</div>
-				<div className="homepage-brands">
+				{/* <div className="homepage-brands">
 					<div className="d-flex">
 						<div className="position-relative">
 							<img className='p-0' src="https://mcdn.coolmate.me/image/March2023/mceclip0_166.jpg" alt="" />
@@ -62,8 +62,8 @@ export default function HomePage() {
 							</div>
 						</div>
 					</div>
-				</div>
-				<div className="homepage-hagstag">
+				</div> */}
+				{/* <div className="homepage-hagstag">
 					<div className="row">
 						<div className="col-6">
 							<p className='text-uppercase'>CÁC SẢN PHẨM TỰ HÀO SẢN XUẤT TẠI VIỆT NAM VÀ DÀNH CHO NGƯỜI VIỆT NAM! <br />
@@ -80,8 +80,8 @@ export default function HomePage() {
 							</div>
 						</div>
 					</div>
-				</div>
-				<div className="homepage-service">
+				</div> */}
+				{/* <div className="homepage-service">
 					<div className="d-flex">
 						<div className="position-relative">
 							<img className='p-0' src="https://mcdn.coolmate.me/image/March2023/mceclip0_26.jpg" alt="" />
@@ -102,7 +102,7 @@ export default function HomePage() {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> */}
 			</main>
 		</>
 	)

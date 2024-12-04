@@ -12,26 +12,25 @@ import Login from "./Login";
 import Register from './Register';
 import { customerLogOut } from '../store/actions/customerActions';
 import { backendAPI } from '@/config';
-import ChatbotButton from './ChatButton';
 
-let fakeCategoryList = [
-    {
-        category_id: 1,
-        title: "Áo Nam",
-        children: [
-            { category_id: 3, title: "Áo T-Shirt" },
-            { category_id: 4, title: "Áo Polo" },
-        ]
-    },
-    {
-        category_id: 2,
-        title: "Quần Nam",
-        children: [
-            { category_id: 5, title: "Quần Short" },
-            { category_id: 6, title: "Quần Jeans" },
-        ]
-    },
-];
+// let fakeCategoryList = [
+//     {
+//         category_id: 1,
+//         title: "Áo Nam",
+//         children: [
+//             { category_id: 3, title: "Áo T-Shirt" },
+//             { category_id: 4, title: "Áo Polo" },
+//         ]
+//     },
+//     {
+//         category_id: 2,
+//         title: "Quần Nam",
+//         children: [
+//             { category_id: 5, title: "Quần Short" },
+//             { category_id: 6, title: "Quần Jeans" },
+//         ]
+//     },
+// ];
 
 const Header = () => {
     const [categoryList, setCategoryList] = useState([]);
@@ -50,7 +49,7 @@ const Header = () => {
                 setCategoryList(respond.data);
             } catch (error) {
                 console.log(error);
-                setCategoryList(fakeCategoryList);
+                // setCategoryList(fakeCategoryList);
             }
         }
         handleGetCategory();

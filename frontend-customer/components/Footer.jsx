@@ -64,7 +64,7 @@ const Footer = () => {
 						</ul>
 					</div>
 				</div>
-				<div className="col-3 row">
+				{/* <div className="col-3 row">
 					<div className="col-12">
 						<ul>
 							<li>
@@ -105,11 +105,11 @@ const Footer = () => {
 							</div>
 						</ul>
 					</div>
-				</div>
-				<div className="copy-right-box fs-11 position-relative">
+				</div> */}
+				{/* <div className="copy-right-box fs-11 position-relative">
 					<p className="fw-bold text-uppercase">© Công ty tnhh elevent</p>
 					<p>Mã số doanh nghiệp: 0108617038. Giấy chứng nhận đăng ký doanh nghiệp do Sở Kế hoạch và Đầu tư TP Hà Nội cấp lần đầu ngày 20/02/2019.</p>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)
