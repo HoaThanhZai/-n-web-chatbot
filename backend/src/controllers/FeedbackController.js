@@ -7,13 +7,13 @@ const User = require('../models/user');
 const Customer_Info = require('../models/customer_info');
 const Order_State = require('../models/order_state');
 const Product_Variant = require('../models/product_variant');
-const Product = require('../models/product');
-const Product_Price_History = require('../models/product_price_history');
+const Product = require('../models/Product');
+const Product_Price_History = require('../models/Product_Price_History');
 const Order_Item = require('../models/order_item');
 const Feedback = require('../models/feedback');
 const Order_Status_Change_History = require('../models/order_status_change_history');
-const Colour = require('../models/colour');
-const Size = require('../models/size');
+const Colour = require('../models/Colour');
+const Size = require('../models/Size');
 
 let create = async (req, res, next) => {
     let customer_id = req.body.customer_id;

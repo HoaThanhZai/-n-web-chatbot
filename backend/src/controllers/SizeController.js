@@ -1,4 +1,4 @@
-const Size = require('../models/size');
+const Size = require('../models/Size');
 
 let create = async (req, res, next) => {
     let size_name = req.body.size_name;

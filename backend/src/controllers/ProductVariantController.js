@@ -1,9 +1,9 @@
 const fs = require("fs");
 
-const Product = require('../models/product');
+const Product = require('../models/Product');
 const Product_Variant = require('../models/product_variant');
-const Product_Image = require('../models/product_image');
-const Product_Price_History = require('../models/product_price_history');
+const Product_Image = require('../models/Product_Image');
+const Product_Price_History = require('../models/Product_Price_History');
 const uploadImage = require('../midlewares/uploadImage');
 
 let create = async (req, res, next) => {
