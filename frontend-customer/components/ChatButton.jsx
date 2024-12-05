@@ -2,7 +2,10 @@
   import axios from "axios";
   import { FaRobot } from 'react-icons/fa';
   import { backendAPI } from "@/config";
+  import ChatbotImage from '../public/img/ai.jpg';
 
+  <img src={ChatbotImage} alt="Chatbot Avatar" />
+  
 
   const ChatbotButton = () => {
     const [isOpen, setIsOpen] = useState(false);  // Kiểm tra trạng thái mở/đóng chatbot
@@ -67,7 +70,17 @@
         onClick={() => setIsOpen(!isOpen)}
         className="chatbot-button"
       >
-        <FaRobot size={27} />
+        <img 
+        src="/img/ai.jpg" 
+        alt="Chatbot Avatar" 
+        style={{
+            width: "70px",
+            height: "70px",
+            borderRadius: "50%",
+        }}
+/>
+
+
       </button>
   
         {/* Hộp thoại chatbot */}
