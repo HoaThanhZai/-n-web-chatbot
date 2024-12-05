@@ -1,89 +1,83 @@
-  import React, { useState, useEffect } from "react";
-  import axios from "axios";
-  import { FaRobot } from 'react-icons/fa';
-  import { backendAPI } from "@/config";
-  import ChatbotImage from '../public/img/ai.jpg';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { FaRobot } from 'react-icons/fa';
+import { backendAPI } from "@/config";
+import ChatbotImage from '../public/img/ai.jpg';
 
-  <img src={ChatbotImage} alt="Chatbot Avatar" />
-  
+const ChatbotButton = () => {
+  const [isOpen, setIsOpen] = useState(false);  // Kiểm tra trạng thái mở/đóng chatbot
+  const [messages, setMessages] = useState([]); // Lưu lịch sử tin nhắn
+  const [userMessage, setUserMessage] = useState(""); // Tin nhắn người dùng
 
-  const ChatbotButton = () => {
-    const [isOpen, setIsOpen] = useState(false);  // Kiểm tra trạng thái mở/đóng chatbot
-    const [messages, setMessages] = useState([]); // Lưu lịch sử tin nhắn
-    const [userMessage, setUserMessage] = useState(""); // Tin nhắn người dùng
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      setMessages([
+        { sender: "bot", text: "Xin chào bạn! Tớ là trợ lý ảo của elevenShop" },
+        { sender: "bot", text: "Tớ có thể giúp gì cho bạn ạ" },
+      ]);
+    }
+  }, [isOpen]);
 
+  const sendMessage = async () => {
+    if (!userMessage.trim()) return;
 
-    useEffect(() => {
-      // Chỉ thêm câu chat mở đầu khi chatbot mở lần đầu tiên và chưa có tin nhắn
-      if (isOpen && messages.length === 0) {
-        setMessages([
-          { sender: "bot", text: "Xin chào bạn! Tớ là trợ lý ảo của elevenShop" },
-          { sender: "bot", text: "Tớ có thể giúp gì cho bạn ạ" },
-        ]);
-      }
-    }, [isOpen]); // Mỗi khi trạng thái isOpen thay đổi
+    const newMessage = { sender: "user", text: userMessage };
+    setMessages((prev) => [...prev, newMessage]);
+    setUserMessage("");
 
-    const sendMessage = async () => {
-      if (!userMessage.trim()) return;  // Không gửi nếu tin nhắn trống
-    
-      const newMessage = { sender: "user", text: userMessage };
-      setMessages((prev) => [...prev, newMessage]);
-      setUserMessage(""); // Reset ô nhập
-    
-      try {
-        // Gửi tin nhắn đến API của backend
-        const response = await axios.post(backendAPI + "/api/chatbot/chat", {
-          message: userMessage,  // Dữ liệu tin nhắn người dùng
-        }, {
-          headers: {
-            'Content-Type': 'application/json',  // Đảm bảo sử dụng đúng Content-Type
-          }
-        });
-        
-    
-        console.log("Phản hồi từ backend:", response.data);
-        
-        // Hiển thị phản hồi từ API (tin nhắn bot)
-        const botMessage = { sender: "bot", text: response.data.reply };
-        setMessages((prev) => [...prev, botMessage]);
-    
-      } catch (error) {
-        console.error("Error sending message:", error);
-        const errorMessage = { sender: "bot", text: "Xin lỗi, em không thể trả lời ngay lúc này." };
-        setMessages((prev) => [...prev, errorMessage]);
-      }
-    };
+    try {
+      const response = await axios.post(backendAPI + "/api/chatbot/chat", {
+        message: userMessage,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
 
+      console.log("Phản hồi từ backend:", response.data);
 
-    return (
-      <div
-        className="chatbot-wrapper"
-        style={{
-          position: "fixed",
-          bottom: "16px",
-          right: "16px", 
-          zIndex: 1000,
-        }}
-      >
-        {/* Nút mở/đóng chatbot */}
+      const botMessage = { sender: "bot", text: response.data.reply };
+      setMessages((prev) => [...prev, botMessage]);
+
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorMessage = { sender: "bot", text: "Xin lỗi, em không thể trả lời ngay lúc này." };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && userMessage.trim() !== "") {
+      e.preventDefault();  // Ngừng hành động mặc định (không xuống dòng)
+      sendMessage(); // Gửi tin nhắn
+    }
+  };
+
+  return (
+    <div
+      className="chatbot-wrapper"
+      style={{
+        position: "fixed",
+        bottom: "16px",
+        right: "16px", 
+        zIndex: 1000,
+      }}
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="chatbot-button"
       >
         <img 
-        src="/img/ai.jpg" 
-        alt="Chatbot Avatar" 
-        style={{
+          src="/img/ai.jpg" 
+          alt="Chatbot Avatar" 
+          style={{
             width: "70px",
             height: "70px",
             borderRadius: "50%",
-        }}
-/>
-
-
+          }}
+        />
       </button>
   
-        {/* Hộp thoại chatbot */}
       {isOpen && (
         <div className="chatbot-box">
           <div className="chatbot-header">
@@ -108,13 +102,14 @@
               value={userMessage}
               onChange={(e) => setUserMessage(e.target.value)}
               placeholder="Bạn cần gì..."
+              onKeyDown={handleKeyDown} // Gọi hàm xử lý khi nhấn phím
             />
             <button onClick={sendMessage}>Gửi</button>
           </div>
         </div>
       )}
-      </div>
-    );
-  };
+    </div>
+  );
+};
 
-  export default ChatbotButton;
+export default ChatbotButton;
