@@ -1,8 +1,8 @@
-// routes/chatbotRoutes.js
 const express = require('express');
-const chatbotController = require('../controllers/ChatbotController');
 let router = express.Router();
+const ChatbotController = require('../controllers/ChatbotController');
 
-router.post('/chat', chatbotController.chatbotQuery);
+// Định nghĩa route cho chatbot
+router.post('/bot', ChatbotController.getChatbotResponse);
 
 module.exports = router;

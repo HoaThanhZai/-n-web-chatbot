@@ -29,7 +29,7 @@
     
       try {
         // Gửi tin nhắn đến API của backend
-        const response = await axios.post(backendAPI + "/api/chatbot/chat", {
+        const response = await axios.post(backendAPI + "/api/chatbot/bot", {
           message: userMessage,  // Dữ liệu tin nhắn người dùng
         }, {
           headers: {

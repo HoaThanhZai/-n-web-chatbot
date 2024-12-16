@@ -10,7 +10,7 @@ const product_variantRouter = require('./product_variant');
 const order = require('./order');
 const feedback = require('./feedback');
 const payment = require('./payment');
-const chatbotRouter = require('./chatbot');
+const chatbot = require('./chatbot');
 
 
 function setRoute(server) {
@@ -35,7 +35,7 @@ function setRoute(server) {
 
     server.use('/api/payment', payment);
 
-    server.use('/api/chatbot',chatbotRouter);
+    server.use('/api/chatbot', chatbot);
 
 }
 
