@@ -95,6 +95,11 @@
               value={userMessage}
               onChange={(e) => setUserMessage(e.target.value)}
               placeholder="Bạn cần gì..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  sendMessage();
+                }
+              }}
             />
             <button onClick={sendMessage}>Gửi</button>
           </div>
@@ -104,5 +109,4 @@
     );
   };
 
-  
   export default ChatbotButton;
