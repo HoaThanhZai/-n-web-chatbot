@@ -10,7 +10,6 @@ genai.configure(api_key=os.environ["API_KEY"])
 
 model = genai.GenerativeModel('gemini-1.5-pro-latest')
 
-user_name = None
 
 class ChatbotHandler(BaseHTTPRequestHandler):
     """
@@ -37,7 +36,6 @@ class ChatbotHandler(BaseHTTPRequestHandler):
         """
         Xử lý POST request từ Node.js.
         """
-        global user_name
 
         if self.path == "/chatbot":
             try:
@@ -67,14 +65,13 @@ class ChatbotHandler(BaseHTTPRequestHandler):
         """
         Logic chatbot.
         """
-        global user_name
         try:
             # Trả về phản hồi tĩnh cho các câu hỏi cơ bản
             if prompt.lower() in ["hi", "hello", "hey"]:
-                return f"Hello {user_name}!"
-            elif prompt.lower() == "how are you?":
-                return f"I'm doing well, thank you, {user_name}!"
-            elif prompt.lower() == "what is your name?":
+                return f"Hello!"
+            elif prompt.lower() in ["how are you?","hôm nay bạn thế nào","bạn khỏe không?"]:
+                return f"I'm doing well, thank you!"
+            elif prompt.lower() in ["what is your name?","tên bạn là gì", "bạn là ai?"]:
                 return "I'm a Eleven AI model."
 
             # Giả lập typing (nếu cần)
