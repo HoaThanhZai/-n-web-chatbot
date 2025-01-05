@@ -73,6 +73,13 @@ class ChatbotHandler(BaseHTTPRequestHandler):
                 return f"I'm doing well, thank you!"
             elif prompt.lower() in ["what is your name?","tên bạn là gì", "bạn là ai?"]:
                 return "I'm a Eleven AI model."
+            elif prompt.lower() in ["Tôi muốn đổi trả hàng, phải làm thế nào?"]:
+                return "Chúng tôi rất sẵn lòng hỗ trợ bạn đổi trả hàng. Bạn vui lòng liên hệ với bộ phận chăm sóc khách hàng để được hướng dẫn cụ thể. Số điện thoại bộ phận chăm sóc khách hàng: 0393275620"
+            elif prompt.lower() in ["Tôi muốn biết cách thức thanh toán?","payment"]:
+                return  "Chúng tôi hỗ trợ nhiều hình thức thanh toán như: thanh toán khi nhận hàng, thanh toán qua ví điện tử"
+            elif prompt.lower() in ["Thời gian giao hàng là bao lâu?","delivery"]:
+                return f"Thời gian giao hàng thường từ 2-5 ngày làm việc, tùy thuộc vào địa chỉ nhận hàng. Bạn có thể kiểm tra chi tiết thời gian giao hàng dự kiến khi đặt hàng."
+
 
             # Giả lập typing (nếu cần)
             time.sleep(1)
