@@ -3,6 +3,7 @@ import os
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+import pandas as pd
 
 # Cấu hình API key cho Generative AI
 os.environ["API_KEY"] = ""
@@ -61,6 +62,27 @@ class ChatbotHandler(BaseHTTPRequestHandler):
                 print(f"Error processing request: {e}")
                 self._send_response(500, {"error": "Internal server error"})
 
+    # Chuyển đổi dữ liệu CSV thành chuỗi ngữ cảnh
+    def csv_to_context(file_path):
+        try:
+            data = pd.read_csv(file_path)
+            context = "Here is the data:\n"
+            context += data.to_string(index=False)  # Lấy dữ liệu để mô hình xử lý
+            return context, data
+        except Exception as e:
+            return f"Error loading CSV file: {e}"
+
+    # Tìm kiếm dữ liệu liên quan
+    def filter_csv_data(data, query):
+        try:
+            filtered_data = data[data.apply(lambda row: query.lower() in str(row).lower(), axis=1)]
+            return filtered_data.to_string(index=False) if not filtered_data.empty else None
+        except Exception as e:
+            return f"Error filtering data: {e}"
+
+    # Tạo ngữ cảnh từ file CSV
+    csv_context, csv_data = csv_to_context("F:\Desktop\Test Chatbot\data.csv")
+
     def chat_with_bot(self, prompt):
         """
         Logic chatbot.
@@ -80,13 +102,22 @@ class ChatbotHandler(BaseHTTPRequestHandler):
             elif prompt.lower() in ["Thời gian giao hàng là bao lâu?","delivery"]:
                 return f"Thời gian giao hàng thường từ 2-5 ngày làm việc, tùy thuộc vào địa chỉ nhận hàng. Bạn có thể kiểm tra chi tiết thời gian giao hàng dự kiến khi đặt hàng."
 
+            # Tích hợp ngữ cảnh từ CSV vào prompt
+            if self.csv_data is not None and "product" in prompt.lower():
+                relevant_data = self.filter_csv_data(self.csv_data, prompt)
+                if relevant_data is None:
+                    return "Không có sản phẩm cần tìm."
+                full_prompt = f"{self.csv_context}\n\nRelevant Data:\n{relevant_data}\n\nUser Question: {prompt}\nBot Answer:"
+            else:
+                full_prompt = f"{self.csv_context}\n\nUser Question: {prompt}\nBot Answer:"
 
             # Giả lập typing (nếu cần)
             time.sleep(1)
 
             # Gọi API Generative AI
-            response = model.generate_content(prompt)
-            return response.text
+            response = model.generate_content(full_prompt)
+            print(response)
+            return response
 
         except Exception as e:
             print(f"Error in chat logic: {e}")
