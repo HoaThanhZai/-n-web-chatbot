@@ -8,12 +8,14 @@ const Customer_Info = require('../models/customer_info');
 const Order_State = require('../models/order_state');
 const Product_Variant = require('../models/product_variant');
 const Product = require('../models/Product');
-const Product_Price_History = require('../models/Product_Price_History');
+const Product_Price_History = require('../models/product_price_history');
 const Order_Item = require('../models/order_item');
 const Feedback = require('../models/feedback');
 const Order_Status_Change_History = require('../models/order_status_change_history');
 const Colour = require('../models/Colour');
 const Size = require('../models/Size');
+
+//Set global cho 
 
 let create = async (req, res, next) => {
     let customer_id = req.body.customer_id;
@@ -80,6 +82,7 @@ let create = async (req, res, next) => {
                     [Sequelize.fn('count', Sequelize.col('rate')), 'count']
                 ],
                 include: { model: Product_Variant, where: { product_id } },
+                group: ['product_variant.product_id']
             });
 
             // Cập nhật lại Rating và feedbackQuantity cho product tương ứng
@@ -121,6 +124,7 @@ let update = async (req, res, next) => {
                     [Sequelize.fn('avg', Sequelize.col('rate')), 'avg'],
                 ],
                 include: { model: Product_Variant, where: { product_id } },
+                group: ['product_variant.product_id']
             });
 
             // Cập nhật lại Rating và feedbackQuantity cho product tương ứng
