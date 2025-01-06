@@ -7,6 +7,9 @@ const Size = require('../models/Size');
 const Product_Price_History = require('../models/Product_Price_History');
 const Product_Image = require('../models/Product_Image');
 const Category = require("../models/category");
+const Order = require("../models/order");
+const Order_Status_Change_History = require("../models/order_status_change_history");
+const Order_Item = require("../models/order_item");
 
 let create = async (req, res, next) => {
     let product_name = req.body.product_name;
@@ -93,46 +96,69 @@ let listAdminSide = async (req, res, next) => {
     return res.send(listProductVariant);
 }
 
-let StatSide = async (req, res, next) => {
+const StatSide = async (req, res, next) => {
     try {
-        // Fetch products along with their price histories
-        let listStat = await Product.findAll({
-            attributes: ['product_id', 'product_name', 'sold'],
-            include: {
-                model: Product_Price_History,
-                attributes: ['price', 'input_price'],
-                separate: true, // Ensure separate queries for each association
-                order: [['created_at', 'DESC']] // Order by created_at descending
-            }
+        const ordersWithState4 = await Order_Status_Change_History.findAll({
+            where: { state_id: 4 },
+            attributes: ['order_id', 'created_at'],
+            raw: true,
         });
 
-        // Map and process each product
-        let processedListStat = listStat.map((productStat) => {
-            // Initialize newProductStat object
-            let newProductStat = {
-                product_id: productStat.product_id,
-                product_name: productStat.product_name,
-                sold: productStat.sold,
-                input_price: null, // Default to null if not found
-                price: null // Default to null if not found
-            };
+        if (!ordersWithState4.length) return [];
 
-            // Check if Product_Price_Histories exist and has items
-            if (productStat.Product_Price_Histories && productStat.Product_Price_Histories.length > 0) {
-                newProductStat.input_price = productStat.Product_Price_Histories[0].input_price;
-                newProductStat.price = productStat.Product_Price_Histories[0].price;
-            }
+        const orderIds = ordersWithState4.reduce((acc, order) => {
+            acc[order.order_id] = order.created_at;
+            return acc;
+        }, {});
 
-            return newProductStat;
+        const soldProducts = await Order_Item.findAll({
+            where: { order_id: { [Op.in]: Object.keys(orderIds) } },
+            attributes: ['order_id', 'product_variant_id', 'price', 'quantity', 'total_value'],
+            include: [
+                {
+                    model: Product_Variant,
+                    attributes: ['product_id'],
+                    include: [
+                        {
+                            model: Product,
+                            attributes: ['product_name'],
+                        },
+                    ],
+                },
+            ],
+            raw: true,
         });
 
-        console.log(processedListStat);
-        return res.send(processedListStat);
+        const results = Object.values(
+            soldProducts.reduce((acc, product) => {
+                const productName = product['product_variant.Product.product_name'];
+                const soldDate = orderIds[product.order_id];
+                const key = `${productName}-${soldDate}`;
+
+                if (!acc[key]) {
+                    acc[key] = {
+                        productName,
+                        sellingPrice: product.price,
+                        quantitySold: 0,
+                        revenue: 0,
+                        soldDate,
+                    };
+                }
+
+                acc[key].quantitySold += product.quantity;
+                acc[key].revenue += product.total_value;
+
+                return acc;
+            }, {})
+        );
+        console.log(results);
+        return res.send(results);
     } catch (error) {
         console.error('Error in StatSide:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 let listCustomerSide = async (req, res, next) => {
     let category_id = Number(req.query.category);
