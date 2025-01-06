@@ -44,11 +44,11 @@ const StatManagementPage = () => {
 
   const handleFilterChange = (date, dateString) => {
     if (date) {
-      setFilterMonth(dayjs(date).month() + 1);
+        setFilterMonth(dayjs(date).month() + 1);
     } else {
-      setFilterMonth(null);
+        setFilterMonth(null);
     }
-  };
+    };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
