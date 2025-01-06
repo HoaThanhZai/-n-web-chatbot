@@ -1,4 +1,4 @@
-  import React, { useState, useEffect } from "react";
+  import React, { useState, useEffect, useRef } from "react";
   import axios from "axios";
   import { FaRobot } from 'react-icons/fa';
   import { backendAPI } from "@/config";
@@ -8,6 +8,7 @@
     const [isOpen, setIsOpen] = useState(false);  // Kiểm tra trạng thái mở/đóng chatbot
     const [messages, setMessages] = useState([]); // Lưu lịch sử tin nhắn
     const [userMessage, setUserMessage] = useState(""); // Tin nhắn người dùng
+    const messagesEndRef = useRef(null);
 
 
     useEffect(() => {
@@ -19,6 +20,11 @@
         ]);
       }
     }, [isOpen]); // Mỗi khi trạng thái isOpen thay đổi
+
+    useEffect(() => {
+      // Scroll to the bottom of the chat messages container
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
     const sendMessage = async () => {
       if (!userMessage.trim()) return;  // Không gửi nếu tin nhắn trống
@@ -88,6 +94,7 @@
                 {message.text}
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
           <div className="chatbot-input">
             <input
