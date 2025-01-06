@@ -81,7 +81,7 @@ class ChatbotHandler(BaseHTTPRequestHandler):
             return f"Error filtering data: {e}"
 
     # Tạo ngữ cảnh từ file CSV
-    csv_context, csv_data = csv_to_context("F:\Desktop\Test Chatbot\data.csv")
+    csv_context, csv_data = csv_to_context("data.csv")
 
     def chat_with_bot(self, prompt):
         """
@@ -93,7 +93,7 @@ class ChatbotHandler(BaseHTTPRequestHandler):
                 return f"Hello!"
             elif prompt.lower() in ["how are you?","hôm nay bạn thế nào","bạn khỏe không?"]:
                 return f"I'm doing well, thank you!"
-            elif prompt.lower() in ["what is your name?","tên bạn là gì", "bạn là ai?"]:
+            elif prompt.lower() in ["what is your name?","tên bạn là gì", "bạn là ai?","bạn tên là gì"]:
                 return "I'm a Eleven AI model."
             elif prompt.lower() in ["Tôi muốn đổi trả hàng, phải làm thế nào?"]:
                 return "Chúng tôi rất sẵn lòng hỗ trợ bạn đổi trả hàng. Bạn vui lòng liên hệ với bộ phận chăm sóc khách hàng để được hướng dẫn cụ thể. Số điện thoại bộ phận chăm sóc khách hàng: 0393275620"
@@ -116,8 +116,8 @@ class ChatbotHandler(BaseHTTPRequestHandler):
 
             # Gọi API Generative AI
             response = model.generate_content(full_prompt)
-            print(response)
-            return response
+            return response.text
+
 
         except Exception as e:
             print(f"Error in chat logic: {e}")
