@@ -13,18 +13,22 @@ def fetch_json_data(api_url):
         print(f"Error: Unable to fetch data, status code {response.status_code}")
         return []
 
+def filter_json_data(json_data, excluded_columns):
+    # Loại bỏ các cột không mong muốn trong dữ liệu JSON
+    filtered_data = []
+    for item in json_data:
+        filtered_item = {key: value for key, value in item.items() if key not in excluded_columns}
+        filtered_data.append(filtered_item)
+    return filtered_data
+
 def update_csv_from_json(json_data, csv_filename):
-    # Kiểm tra xem file CSV đã tồn tại hay chưa
-    file_exists = os.path.isfile(csv_filename)
-    
-    # Mở hoặc tạo file CSV
-    with open(csv_filename, mode='a', newline='', encoding='utf-8') as csv_file:
+    # Mở file CSV ở chế độ ghi ('w') để xóa dữ liệu cũ
+    with open(csv_filename, mode='w', newline='', encoding='utf-8') as csv_file:
         if json_data:
             writer = csv.DictWriter(csv_file, fieldnames=json_data[0].keys())
             
-            # Nếu file chưa tồn tại, ghi tiêu đề
-            if not file_exists:
-                writer.writeheader()
+            # Ghi tiêu đề
+            writer.writeheader()
 
             # Ghi dữ liệu mới vào file CSV
             writer.writerows(json_data)
@@ -35,6 +39,12 @@ api_url = "http://localhost:8080/api/product/customer/list"
 # Lấy dữ liệu từ API
 json_data = fetch_json_data(api_url)
 
+# Các cột cần loại bỏ
+excluded_columns = ["sold", "feedback_quantity", "colour_id", "product_image"]
+
+# Lọc dữ liệu để loại bỏ các cột không mong muốn
+filtered_data = filter_json_data(json_data, excluded_columns)
+
 # Nếu có dữ liệu, cập nhật vào file CSV
-if json_data:
-    update_csv_from_json(json_data, 'data.csv')
+if filtered_data:
+    update_csv_from_json(filtered_data, 'data.csv')
