@@ -67,6 +67,7 @@ let update = async (req, res, next) => {
             if (!productVariant) return res.status(400).send('Product Variant này không tồn tại');
 
             for (let file of files) {
+                console.log(file);
                 fileName = file.path.slice(-40, file.path.length)
                 let path = 'http://localhost:8080/static/images/' + fileName
                 await Product_Image.create({
@@ -76,11 +77,23 @@ let update = async (req, res, next) => {
             }
 
             for (let { image_id, path } of productVariant.Product_Images) {
-                let directoryPath = __basedir + '\\static\\images\\'
-                let fileName = path.slice(-40, path.length)
-                fs.unlinkSync(directoryPath + fileName)
-                await Product_Image.destroy({ where: { image_id } })
+                let directoryPath = __basedir + '\\static\\images\\';
+                let fileName = path.slice(-40, path.length);
+                let fullPath = directoryPath + fileName;
+            
+                if (fs.existsSync(fullPath)) {
+                    try {
+                        fs.unlinkSync(fullPath);
+                    } catch (err) {
+                        console.error(`Lỗi khi xóa file: ${fullPath}`, err);
+                    }
+                } else {
+                    console.warn(`File không tồn tại: ${fullPath}`);
+                }
+            
+                await Product_Image.destroy({ where: { image_id } });
             }
+            
 
             await productVariant.update({ quantity })
 
