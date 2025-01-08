@@ -3,7 +3,7 @@ const fs = require("fs");
 const Product = require('../models/Product');
 const Product_Variant = require('../models/product_variant');
 const Product_Image = require('../models/Product_Image');
-const Product_Price_History = require('../models/Product_Price_History');
+const Product_Price_History = require('../models/product_price_history');
 const uploadImage = require('../midlewares/uploadImage');
 
 let create = async (req, res, next) => {
@@ -76,7 +76,7 @@ let update = async (req, res, next) => {
             }
 
             for (let { image_id, path } of productVariant.Product_Images) {
-                let directoryPath = __basedir + '\\public\\images\\'
+                let directoryPath = __basedir + '\\static\\images\\'
                 let fileName = path.slice(-40, path.length)
                 fs.unlinkSync(directoryPath + fileName)
                 await Product_Image.destroy({ where: { image_id } })

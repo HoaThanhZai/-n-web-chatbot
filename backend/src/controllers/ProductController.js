@@ -67,7 +67,9 @@ let listAdminSide = async (req, res, next) => {
         include: [
             {
                 model: Product, attributes: ['product_id', 'product_name'],
-                include: { model: Product_Price_History, attributes: ['price','input_price'], separate: true, order: [['created_at', 'DESC']] }
+                include: { model: Product_Price_History, attributes: ['price','input_price'],
+                separate: true, 
+                order: [['created_at', 'DESC']] }
             },
             { model: Colour, attributes: ['colour_name'] },
             { model: Size, attributes: ['size_name'] },

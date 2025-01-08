@@ -101,7 +101,7 @@ const CreateProductPage = () => {
                 clearPage()
             } catch (err) {
                 console.log(err);
-            }
+            }   
         }
     }
 
